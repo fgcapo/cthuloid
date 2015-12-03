@@ -161,7 +161,7 @@ class Servos(SerialThread):
                 # 16-bit little endian
                 buf += struct.pack('<H', angle)
             
-            print(buf)
+            #print(buf)
             ucServos.write(buf)
 
         # text protocol of id:angle pairs
@@ -171,10 +171,10 @@ class Servos(SerialThread):
                 cmd += ' ' + str(id) + ':' + str(angle)
 
             cmd += '\n'
-            print(cmd)
+            #print(cmd)
             self.write(str.encode(cmd))
 
-    def handleLine(self, line): print(line)
+    def handleLine(self, line): pass#print(line)
         # read the positions of all servos, which is spread over multiple lines
         # expect the next some number of lines to be servo info
 #        if line.startswith('Servo Readings:'):

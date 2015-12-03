@@ -133,7 +133,7 @@ class Game(ShowBase):
 
 
         self.arms = []
-        idMap = {0:9, 1:11, 2:29, 3:31, 4:15}
+        idMap = {0:9, 1:11, 2:17, 3:27, 4:29}
 
         for node in self.level.get_children():
           if not node.getName().startswith('arm'): continue
@@ -181,7 +181,7 @@ class Game(ShowBase):
       return task.again
 
     def monitorArms(self, task):
-      #import pdb; pdb.set_trace()
+      anglesDict = {}
       for arm in self.arms:
         direction = self.ralph.get_pos() - arm.get_pos()
         direction.normalize()
@@ -204,10 +204,15 @@ class Game(ShowBase):
         arm.jointForearm.setH(-dec * 180/math.pi)
         arm.jointBase.setP(-ra2 * 180/math.pi)
 
-        dec = arm.jointForearm.getH() / 90.0 * 300 + 512
-        ra = arm.jointBase.getP()    / 90.0 * 300 + 212
+        dec = -arm.jointForearm.getH() / 90.0 * 300 + 512
+        ra = -arm.jointBase.getP()    / 90.0 * 300 + 212
+
+        #print -arm.jointBase.getP(), -arm.jointBase.getH()
         baseID = arm.baseID
-        servos.setAngle({baseID:int(round(ra)), (baseID+1):int(round(dec))})
+        anglesDict[baseID] = int(round(ra))
+        anglesDict[baseID+1] = int(round(dec))
+
+      servos.setAngle(anglesDict)
       return task.again
 
     def setForearm(self, inc):
